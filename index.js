@@ -12,7 +12,7 @@ app.use(cors());
 app.use(json())
 
 // Executando a aplicação
-const PORTA = process.env.PORT || 5000;
+const PORTA = process.env.PORT || 5500;
 
 app.listen(PORTA, () => {
     console.log(`Execuntado a aplicação na porta ${PORTA} ...`);
