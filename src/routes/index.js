@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import productsRouter from './productsRouter.js';
+import homeRouter from './homeRouter.js';
 
 const routers = Router();
 
-routers.use(productsRouter);
+routers.use(homeRouter);
 
 export default routers;
