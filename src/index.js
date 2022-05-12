@@ -2,7 +2,7 @@ import express, {json} from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import db from "./db.js";
+import routers from "./routes/index.js";
 
 dotenv.config();
 
@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(json())
+app.use(routers);
 
 // Executando a aplicação
 const PORTA = process.env.PORT || 5500;
