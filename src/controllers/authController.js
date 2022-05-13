@@ -39,7 +39,7 @@ export async function singIn(req, res) {
         }
 
         await db.collection("sessions").insertOne(query);
-        console.log(debug("Session registered succesfully..."));
+        console.log("Session registered succesfully...");
 
         const responseObject = {
             token
@@ -48,7 +48,7 @@ export async function singIn(req, res) {
         return res.status(200).send(responseObject);
 
     } catch (error) {
-        console.log("Server Internal error... \n", e);
+        console.log("Server Internal error... \n", error);
         return res.sendStatus(500);
     }
 
