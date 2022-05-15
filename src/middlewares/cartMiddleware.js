@@ -22,7 +22,7 @@ export async function getUserCart(req, res, next) {
     try{
         let query = {$and: [{userId: user._id}, {status: "opened"}]};
 
-        const cart = await db.collections("carts").findOne(query);
+        const cart = await db.collection("carts").findOne(query);
 
         if (!cart){
             console.log("Couldn't find a valid cart...");

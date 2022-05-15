@@ -3,7 +3,8 @@ import db from "../db.js";
 
 export async function updateProductCart(req, res) {
     // {productId, qty, type}
-    const { chart } = res.locals;
+    const { cart } = res.locals;
+    console.log(cart);
 
     const product = {
         ...req.body,
@@ -17,7 +18,7 @@ export async function updateProductCart(req, res) {
         };
 
         let query = {
-            _id: chart._id
+            _id: cart._id
         }
 
         // Adicionando o objeto ao array de produtos no carrinho
@@ -37,9 +38,11 @@ export async function updateProductCart(req, res) {
         operation = selectProductOperation(product);
         await db.collection("products").updateOne({ _id: product.productId }, operation);
 
+        res.status(200).send("Product added to the cart");
+
 
     } catch (error) {
-        console.log("Server Internal error... \n", e);
+        console.log("Server Internal error... \n", error);
         return res.sendStatus(500);
     }
 }

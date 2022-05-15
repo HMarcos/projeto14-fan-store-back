@@ -35,7 +35,7 @@ export async function singIn(req, res) {
 
         let query = {
             userId: user._id,
-            status: "open",
+            status: "opened",
             products: [],
             totalValue: 0
         }
