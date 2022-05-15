@@ -35,8 +35,8 @@ export async function updateProductCart(req, res) {
         await db.collection("carts").updateOne(query, operation);
 
         // Atualizando o estoque do produto
-        operation = selectProductOperation(product);
-        await db.collection("products").updateOne({ _id: product.productId }, operation);
+        /*operation = selectProductOperation(product);
+        await db.collection("products").updateOne({ _id: product.productId }, operation);*/
 
         res.status(200).send("Product added to the cart");
 
