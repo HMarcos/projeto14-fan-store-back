@@ -18,8 +18,16 @@ export async function valitateRegister(req, res, next) {
     }
 
     try {
-        const query = { email: register.email };
-        const user = await db.collection("users").findOne(query);
+        let query = { email: register.email };
+        let user = await db.collection("users").findOne(query);
+
+        if (user) {
+            console.log("User already registered...");
+            return res.status(409).send("User already registered");
+        }
+
+        query = { cpf: register.cpf };
+        user = await db.collection("users").findOne(query);
 
         if (user) {
             console.log("User already registered...");
