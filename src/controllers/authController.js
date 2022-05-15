@@ -32,7 +32,18 @@ export async function singIn(req, res) {
     const token = uuid_v4();
 
     try {
-        const query = {
+
+        let query = {
+            userId: user._id,
+            status: "open",
+            products: [],
+            totalValue: 0
+        }
+
+        await db.collection("carts").insertOne(query);
+        console.log("Chart created succesfully...");
+
+         query = {
             token,
             userId: user._id,
             status: "active"
