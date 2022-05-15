@@ -41,7 +41,7 @@ export async function singIn(req, res) {
         }
 
         await db.collection("carts").insertOne(query);
-        console.log("Chart created succesfully...");
+        console.log("Cart created succesfully...");
 
          query = {
             token,

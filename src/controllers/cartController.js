@@ -1,10 +1,10 @@
-import db from "./../db.js";
+import db from "../db.js";
 
-export async function postProductChart(req, res) {
+export async function postProductCart(req, res) {
     try {
-        let chart = req.body;
+        let cart = req.body;
 
-        await db.collection('charts').insertOne(chart);
+        await db.collection('carts').insertOne(cart);
 
         console.log("Product added successfully...");
         return res.status(201).send("Product added successfully...");
