@@ -1,8 +1,10 @@
-import {Router} from 'express';
-import { postProductCart } from '../controllers/cartController.js';
+import { Router } from 'express';
+import { updateProductCart } from './../controllers/cartController.js';
+import { validateProduct, getUserCart } from './../middlewares/cartMiddleware.js';
+import { validateToken } from './../middlewares/tokenMiddleware.js';
 
 const cartRouter = Router();
 
-cartRouter.post('/cart', postProductCart);
+cartRouter.put('/cart', validateToken, validateProduct, getUserCart, updateProductCart);
 
 export default cartRouter;
