@@ -143,16 +143,75 @@ export async function renderCart(req, res) {
     }
 }
 
-/*const cart = {
-    userId: "627df3e2ccb008e40e3b0c44",
-    status: "opened",
-    products: [{
-        productId: "627c25764fe14e657acaa975",
-        qty: 1,
-        type: "P",
-        name: "Camiseta Spider Man super maneira com silk etc e tal",
-        price: 50,
-        url: "https://m.media-amazon.com/images/I/41rmhM8oA-L._AC_.jpg"
-    },
-    totalValue: 78
-]*/
+export async function deleteProductCart(req, res) {
+    const { cart } = res.locals;
+    const { idProduct } = req.params;
+
+    try {
+        const teste = await db.collection('carts').updateOne(
+            { _id: cart._id },
+            { $pull: { products: { productId: new ObjectId(idProduct) } } },
+            false,
+            false,
+        );
+
+        updateCartTotal(cart._id)
+
+        console.log('executando delete')
+        console.log(teste)
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.log("Server Internal error... \n", error);
+        return res.sendStatus(500);
+    }
+}
+
+async function updateCartTotal(cartId) {
+
+    try {
+        const cart = await db.collection('carts').findOne({ _id: cartId });
+        const { products } = cart;
+
+        const prices = await Promise.all(products.map(async (product) => {
+            const { productId, qty } = product;
+
+            const query = {
+                _id: productId
+            };
+
+            const filter = {
+                _id: 0,
+                price: 1,
+            };
+
+            try {
+                const productData = await db.collection("products").findOne(query, filter);
+
+                const price = Number(qty) * productData.price;
+                
+                return price;
+
+            } catch (error) {
+                console.log("Server Internal error... \n", error);
+                return res.sendStatus(500);
+            }
+        }));
+
+        console.log(prices);
+
+        const sum = prices.reduce((partialSum, a) => partialSum + a, 0);
+
+        const operation = {
+            $set: {
+                totalValue: Number(sum)
+            }
+        };
+
+        await db.collection("carts").updateOne({_id: cartId }, operation);
+
+    } catch (error) {
+        console.log("Server Internal error... \n", error);
+        return res.sendStatus(500);
+    }
+}
