@@ -47,10 +47,10 @@ export async function updateProductCart(req, res) {
     }
 }
 
-function selectProductOperation (product){
-    
+function selectProductOperation(product) {
+
     let operation = null;
-    
+
     if (product.type.toUpperCase() === 'P') {
         operation = {
             $inc: {
@@ -90,6 +90,69 @@ export async function renderCart(req, res) {
     const { cart } = res.locals;
     console.log(cart);
 
-    res.status(200).send(cart);
+    const { products } = cart;
 
+    try {
+        const infoProducts = await Promise.all(products.map(async (product) => {
+            const { productId, qty, type } = product;
+
+            const query = {
+                _id: productId
+            };
+
+            const filter = {
+                _id: 0,
+                name: 1,
+                price: 1,
+                url: 1
+            };
+
+            try {
+                const productData = await db.collection("products").findOne(query, filter);
+
+                const infoProduct = {
+                    productId,
+                    type,
+                    qty,
+                    name: productData.name,
+                    price: productData.price,
+                    url: productData.url
+                }
+
+                return infoProduct;
+
+            } catch (error) {
+                console.log("Server Internal error... \n", error);
+                return res.sendStatus(500);
+            }
+        })
+        );
+
+        const finalCart = {
+            ...cart,
+            products: infoProducts
+        }
+
+        console.log(finalCart);
+
+        res.status(200).send(finalCart);
+
+    } catch (error) {
+        console.log("Server Internal error... \n", error);
+        return res.sendStatus(500);
+    }
 }
+
+/*const cart = {
+    userId: "627df3e2ccb008e40e3b0c44",
+    status: "opened",
+    products: [{
+        productId: "627c25764fe14e657acaa975",
+        qty: 1,
+        type: "P",
+        name: "Camiseta Spider Man super maneira com silk etc e tal",
+        price: 50,
+        url: "https://m.media-amazon.com/images/I/41rmhM8oA-L._AC_.jpg"
+    },
+    totalValue: 78
+]*/

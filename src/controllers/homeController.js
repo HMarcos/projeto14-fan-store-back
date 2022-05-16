@@ -1,18 +1,20 @@
 import db from '../db.js'
 
-export async function getProducts(req,res) {
+export async function getProducts(req, res) {
     try {
         const products = await db.collection('products').aggregate([
             {
-              $lookup: {
-                from: "franchises",
-                localField: "idFranchise",
-                foreignField: "idFranchise",
-                as: "franchises"
-              }
+                $lookup: {
+                    from: "franchises",
+                    localField: "idFranchise",
+                    foreignField: "idFranchise",
+                    as: "franchises"
+                }
             }
-          ]).toArray();
-        console.log(products);
+        ]).toArray();
+
+        //console.log(products);
+
         return res.status(200).send(products);
     } catch (e) {
         console.log(e);
