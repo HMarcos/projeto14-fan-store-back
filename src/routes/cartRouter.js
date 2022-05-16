@@ -6,6 +6,6 @@ import  validateToken  from './../middlewares/tokenMiddleware.js';
 const cartRouter = Router();
 
 cartRouter.put('/cart', validateToken, validateProduct, getUserCart, updateProductCart);
-cartRouter.get('/cart', renderCart);
+cartRouter.get('/cart', validateToken, getUserCart, renderCart);
 
 export default cartRouter;
