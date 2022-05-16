@@ -85,3 +85,11 @@ function selectProductOperation (product){
 
     return operation;
 }
+
+export async function renderCart(req, res) {
+    const { cart } = res.locals;
+    console.log(cart);
+
+    res.status(200).send(cart);
+
+}
