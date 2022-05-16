@@ -65,6 +65,10 @@ export async function finishPayment(req, res) {
     const { products } = cart;
     const { paymentType } = req.body;
 
+    console.log(cart);
+    console.log('--------------------');
+    console.log(products);
+
     const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
     console.log(time);
 
@@ -80,7 +84,7 @@ export async function finishPayment(req, res) {
 
         await db.collection('purchases').insertOne(finalPayment);
 
-        await Promise.all(products.forEach(async (product) => {
+        await Promise.all(products.map(async (product) => {
 
             const operation = selectProductOperation(product);
             await db.collection("products").updateOne({ _id: product.productId }, operation);
