@@ -61,6 +61,7 @@ export async function getInfoPayment(req, res) {
 
 export async function finishPayment(req, res) {
     const { cart } = res.locals;
+    const { user } = res.locals;
 
     const { products } = cart;
     const { paymentType } = req.body;
@@ -90,11 +91,19 @@ export async function finishPayment(req, res) {
             await db.collection("products").updateOne({ _id: product.productId }, operation);
         }));
 
+        let query = {$and: [{_id: cart._id}, {status: "opened"}]};
 
-        // Atualizando o estoque do produto
-        /*operation = selectProductOperation(product);
-        await db.collection("products").updateOne({ _id: product.productId }, operation);*/
+        await db.collection('carts').updateOne(query, {$set: {status: "closed"}});
 
+        query = {
+            userId: user._id,
+            status: "opened",
+            products: [],
+            totalValue: 0
+        }
+
+        await db.collection("carts").insertOne(query);
+        console.log("Cart created succesfully...");
     } catch (error) {
 
         console.log("Server Internal error... \n", error);
