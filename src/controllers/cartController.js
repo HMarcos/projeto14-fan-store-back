@@ -34,10 +34,6 @@ export async function updateProductCart(req, res) {
 
         await db.collection("carts").updateOne(query, operation);
 
-        // Atualizando o estoque do produto
-        /*operation = selectProductOperation(product);
-        await db.collection("products").updateOne({ _id: product.productId }, operation);*/
-
         res.status(200).send("Product added to the cart");
 
 
@@ -45,45 +41,6 @@ export async function updateProductCart(req, res) {
         console.log("Server Internal error... \n", error);
         return res.sendStatus(500);
     }
-}
-
-function selectProductOperation(product) {
-
-    let operation = null;
-
-    if (product.type.toUpperCase() === 'P') {
-        operation = {
-            $inc: {
-                pQty: (-product.qty)
-            }
-        };
-    }
-
-    else if (product.type.toUpperCase() === 'M') {
-        operation = {
-            $inc: {
-                mQty: (-product.qty)
-            }
-        };
-    }
-
-    else if (product.type.toUpperCase() === 'G') {
-        operation = {
-            $inc: {
-                gQty: (-product.qty)
-            }
-        };
-    }
-
-    else {
-        operation = {
-            $inc: {
-                uniqueQty: (-product.qty)
-            }
-        };
-    }
-
-    return operation;
 }
 
 export async function renderCart(req, res) {
