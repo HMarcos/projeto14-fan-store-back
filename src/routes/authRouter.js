@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { valitateRegister, validateLogin } from "../middlewares/authMIddleware.js";
 import { singUp, singIn, logout } from "./../controllers/authController.js";
-import  validateToken  from './../middlewares/tokenMiddleware.js';
+import validateToken from './../middlewares/tokenMiddleware.js';
 import { getUserCart } from './../middlewares/cartMiddleware.js';
 
 const authRouter = Router();

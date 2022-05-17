@@ -32,8 +32,6 @@ export async function getProducts(req, res) {
             }
         ]).toArray();
 
-        //console.log(products);
-
         return res.status(200).send(products);
     } catch (e) {
         console.log(e);

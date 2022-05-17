@@ -4,7 +4,6 @@ import db from "../db.js";
 export async function updateProductCart(req, res) {
     // {productId, qty, type}
     const { cart } = res.locals;
-    console.log(cart);
 
     const product = {
         ...req.body,
@@ -45,7 +44,6 @@ export async function updateProductCart(req, res) {
 
 export async function renderCart(req, res) {
     const { cart } = res.locals;
-    console.log(cart);
 
     const { products } = cart;
 
@@ -90,8 +88,6 @@ export async function renderCart(req, res) {
             products: infoProducts
         }
 
-        console.log(finalCart);
-
         res.status(200).send(finalCart);
 
     } catch (error) {
@@ -114,8 +110,6 @@ export async function deleteProductCart(req, res) {
 
         updateCartTotal(cart._id)
 
-        console.log('executando delete')
-        console.log(teste)
         res.sendStatus(200);
 
     } catch (error) {
@@ -146,7 +140,7 @@ async function updateCartTotal(cartId) {
                 const productData = await db.collection("products").findOne(query, filter);
 
                 const price = Number(qty) * productData.price;
-                
+
                 return price;
 
             } catch (error) {
@@ -154,8 +148,6 @@ async function updateCartTotal(cartId) {
                 return res.sendStatus(500);
             }
         }));
-
-        console.log(prices);
 
         const sum = prices.reduce((partialSum, a) => partialSum + a, 0);
 
@@ -165,7 +157,7 @@ async function updateCartTotal(cartId) {
             }
         };
 
-        await db.collection("carts").updateOne({_id: cartId }, operation);
+        await db.collection("carts").updateOne({ _id: cartId }, operation);
 
     } catch (error) {
         console.log("Server Internal error... \n", error);
