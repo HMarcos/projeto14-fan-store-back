@@ -23,7 +23,7 @@ export async function getPurchaseHistory(req, res) {
                 !(cart === undefined)
             )
         });
-        console.log(purchasedHistory);
+
         res.status(200).send(purchasedHistory);
 
     } catch(e){
