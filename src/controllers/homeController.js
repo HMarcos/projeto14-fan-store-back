@@ -1,8 +1,27 @@
 import db from '../db.js'
 
 export async function getProducts(req, res) {
+    const { category, franchise } = req.query;
+    let match = {};
+
+    if (category && franchise) {
+        match = { $and: [{ idCategory: parseInt(category) }, { idFranchise: parseInt(franchise) }] };
+    }
+    else if (category) {
+        match = { idCategory: parseInt(category) };
+    }
+    else if (franchise) {
+        match = { idFranchise: parseInt(franchise) };
+    }
+
+
+    const queryStrings = req.query;
+
     try {
         const products = await db.collection('products').aggregate([
+            {
+                $match: match
+            },
             {
                 $lookup: {
                     from: "franchises",
@@ -12,8 +31,6 @@ export async function getProducts(req, res) {
                 }
             }
         ]).toArray();
-
-        //console.log(products);
 
         return res.status(200).send(products);
     } catch (e) {

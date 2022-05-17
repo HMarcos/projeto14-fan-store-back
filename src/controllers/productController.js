@@ -6,7 +6,7 @@ export async function getProductById(req, res) {
 
     try {
         const { productId } = req.params;
-        const product = await db.collection('products').findOne({  _id: new ObjectId(productId) });
+        const product = await db.collection('products').findOne({ _id: new ObjectId(productId) });
 
         if (!product) {
             res.sendStatus(404);

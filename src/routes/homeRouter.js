@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import { getProducts, getCategories, getFranchises } from '../controllers/homeController.js';
 
 const homeRouter = Router();
